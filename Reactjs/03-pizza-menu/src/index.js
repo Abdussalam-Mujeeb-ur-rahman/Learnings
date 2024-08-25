@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import ReactDOM from "react-dom/client";
+import "./index.css";
 
 const pizzaData = [
   {
@@ -58,44 +59,72 @@ function App() {
   });
 
   return (
-    <div>
+    <div className="container">
       <Header />
-      <Menu />
+      <Menu pizzaData={pizzaData} />
       <Footer current={time} hour={hour} />
     </div>
   );
 }
 
 function Header() {
-  return <h1>Fast React Pizza Co.</h1>;
+  const style = {};
+
+  return (
+    <header>
+      <h1 style={style} className="header">
+        Fast React Pizza Co.
+      </h1>
+    </header>
+  );
 }
 
-function Menu() {
+function Menu(props) {
+  const { pizzaData } = props;
+
   return (
-    <div>
+    <main className="menu">
       <h2>Our Menu</h2>
-      <Pizza />
-      <Pizza />
-    </div>
+      <div className="pizza-wrapper">
+      {
+        pizzaData && pizzaData.map((pizza, index) => {
+          return (
+            <Pizza
+              key={index}
+              name={pizza.name}
+              price={pizza.price}
+              ingredients={pizza.ingredients}
+              img={`/${pizza.photoName}`}
+              alt={pizza.name}
+              soldOut={pizza.soldOut}
+            />
+          )
+        })
+      }
+      </div>
+    </main>
+  );
+}
+
+function Pizza({img, alt, name, price, ingredients, soldOut}) {
+  return (
+    <li className={`pizza ${soldOut ? "sold-out" : ""}`}>
+      <img src={img} alt={alt} />
+      <div>
+        <h3>{name}</h3>
+        <p>price: {soldOut ? "SOLD OUT" : price}</p>
+        <p>ingredients: {ingredients}</p>
+      </div>
+    </li>
   );
 }
 
 function Footer(props) {
   return (
-    <footer>
-      {props.current} We're currently 
+    <footer className="footer">
+      {props.current} We're currently{" "}
       {props.hour > 7 && props.hour < 21 ? "open" : "closed"}!
     </footer>
-  );
-}
-
-function Pizza() {
-  return (
-    <div>
-      <img src="pizzas/focaccia.jpg" alt="focaccia" />
-      <h2>Focaccia</h2>
-      <p>Bread with italian olive oil and rosemary</p>
-    </div>
   );
 }
 
