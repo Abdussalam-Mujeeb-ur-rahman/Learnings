@@ -1,5 +1,8 @@
 .container {
-    border: 2px solid red;
     margin: 0 auto;
     width: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
