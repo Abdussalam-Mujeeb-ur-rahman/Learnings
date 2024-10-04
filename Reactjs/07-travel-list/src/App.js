@@ -22,6 +22,10 @@ const App = () => {
     setItems(currItems);
   }
 
+  function handleClearItems() {
+    setItems([]);
+  }
+
   return (
     <div className="app">
       <Header />
@@ -30,6 +34,7 @@ const App = () => {
         items={items}
         onDeleteItems={handleDeleteItem}
         handleChangeItemStatus={handleChangeItemStatus}
+        onClearItems={handleClearItems}
       />
       <Stats items={items} />
     </div>
@@ -83,11 +88,19 @@ function Form({ onAddItems }) {
   );
 }
 
-function List({ items, onDeleteItems, handleChangeItemStatus }) {
+function List({ items, onDeleteItems, handleChangeItemStatus, onClearItems }) {
+  const [sortBy, setSortBy] = useState("input")
+
+  let sortedItems;
+
+  if(sortBy === "input") sortedItems=items;
+  if(sortBy === "description") sortedItems = items.slice().sort((a, b) => a.description.localeCompare(b.description));
+  if(sortBy === "packed") sortedItems = items.slice().sort((a, b) => Number(a.packed) - Number(b.packed));
+
   return (
     <div className="list">
       <ul>
-        {items.map((item) => (
+        {sortedItems.map((item) => (
           <Item
             item={item}
             key={item.id}
@@ -96,6 +109,16 @@ function List({ items, onDeleteItems, handleChangeItemStatus }) {
           />
         ))}
       </ul>
+
+      <div className="actions">
+        <select  value={sortBy} onChange={e => setSortBy(e.target.value)}>
+          <option value="input">Sort by input order</option>
+          <option value="description">Sort by description</option>
+          <option value="packed">Sort by packed status</option>
+        </select>
+
+        <button onClick={() => onClearItems()}>Clear Items</button>
+      </div>
     </div>
   );
 }
