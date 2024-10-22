@@ -31,7 +31,9 @@ function Steps() {
             <div className={step === 2 ? "active" : ""}>3</div>
           </div>
 
-          <p className="message">{messages[step]}</p>
+          <StepMessage step={step}>
+            {messages[step]}
+          </StepMessage>
 
           <div className="buttons">
             <Button
@@ -53,6 +55,14 @@ function Steps() {
       )}
     </>
   );
+}
+
+function StepMessage({ step, children }) {
+
+ return <p className="message">
+    <h3>Step {step}:</h3>
+    {children}
+  </p>
 }
 
 function Button({ textColor, bgColor, onClick, children }) {
